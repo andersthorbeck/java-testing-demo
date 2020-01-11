@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,14 +27,20 @@ public class TemperatureRepository {
     this.jdbcTemplate = jdbcTemplate;
   }
 
-  public void fetchTemperaturesBetween(LocalDateTime from, LocalDateTime to) {
-    String query = "SELECT celsius FROM temperature WHERE datetime BETWEEN :from AND :to";
+  public List<TemperatureReading> fetchAllTemperatures() {
+    String query = "SELECT datetime, celsius FROM temperature";
+
+    return jdbcTemplate.query(query, rowMapper);
+  }
+
+  public List<TemperatureReading> fetchTemperaturesBetween(LocalDateTime from, LocalDateTime to) {
+    String query = "SELECT datetime, celsius FROM temperature WHERE datetime BETWEEN :from AND :to";
 
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("from", toSqlTimestamp(from), Types.TIMESTAMP);
     params.addValue("to", toSqlTimestamp(to), Types.TIMESTAMP);
 
-    jdbcTemplate.query(query, params, rowMapper);
+    return jdbcTemplate.query(query, params, rowMapper);
   }
 
   private Timestamp toSqlTimestamp(LocalDateTime dateTime) {
