@@ -26,7 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
     listeners = FlywayTestExecutionListener.class,
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
 )
-public class TemperatureRepositoryTest {
+public class TemperatureRepositoryTestWithExternalDb {
 
   @Autowired
   TemperatureRepository repository;
