@@ -51,6 +51,7 @@ public class TemperatureRepositoryTestWithContainerizedDb {
     }
   }
 
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") // https://stackoverflow.com/q/26889970/854151
   @Autowired
   TemperatureRepository repository;
 
