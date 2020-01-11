@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.is;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import no.knowit.kds2020.climate.Application;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.flywaydb.test.FlywayTestExecutionListener;
 import org.flywaydb.test.annotation.FlywayTest;
@@ -28,6 +27,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 )
 @AutoConfigureTestDatabase
 public class TemperatureRepositoryTestWithInMemoryDb {
+
+  // TODO: Figure out how to manually specify H2 config?
 
   @Autowired
   TemperatureRepository repository;
