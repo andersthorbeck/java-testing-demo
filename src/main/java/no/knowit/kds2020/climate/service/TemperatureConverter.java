@@ -1,4 +1,4 @@
-package no.knowit.kds2020.climate;
+package no.knowit.kds2020.climate.service;
 
 public class TemperatureConverter {
 

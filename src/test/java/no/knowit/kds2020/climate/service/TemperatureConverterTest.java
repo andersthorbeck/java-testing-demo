@@ -1,6 +1,6 @@
-package no.knowit.kds2020.climate;
+package no.knowit.kds2020.climate.service;
 
-import static no.knowit.kds2020.climate.TemperatureConverter.celsiusToFahrenheit;
+import static no.knowit.kds2020.climate.service.TemperatureConverter.celsiusToFahrenheit;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
