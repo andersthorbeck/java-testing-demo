@@ -57,12 +57,12 @@ public class GrapherService {
                 graphBuilder.append(centerPad(r, columnTotalWidth, padChar));
               } else if (finalT == r) {
                 graphBuilder
-                    .append(repeat(' ', columnSpace))
+                    .append(repeat(padChar, columnSpace))
                     .append('*')
-                    .append(repeat(' ', columnSpace));
+                    .append(repeat(padChar, columnSpace));
               } else if (finalT == 0) {
                 graphBuilder.append(repeat('-', columnTotalWidth));
-              } else if (Math.abs(r) <= Math.abs(finalT)) {
+              } else if (Math.abs(finalT) <= Math.abs(r) && Math.signum(finalT) == Math.signum(r)) {
                 graphBuilder
                     .append(repeat(' ', columnSpace))
                     .append('|')
