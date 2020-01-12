@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
-public class TemperatureApiConsumerPact {
+public class TemperatureApiPactConsumerTest {
 
   private static final String CONSUMER_NAME = "grapher";
   private static final String PROVIDER_NAME = "climate";
