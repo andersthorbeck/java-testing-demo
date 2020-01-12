@@ -5,7 +5,6 @@ import no.knowit.kds2020.grapher.model.TemperatureReading;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +21,7 @@ public class TemperatureApiClient {
     this.restTemplate = restTemplate;
   }
 
-  public void getAllTemperatureReadings() {
+  public List<TemperatureReading> getAllTemperatureReadings() {
     ResponseEntity<List<TemperatureReading>> responseEntity = restTemplate.exchange(
         apiUrl,
         HttpMethod.GET,
@@ -32,7 +31,7 @@ public class TemperatureApiClient {
 
     List<TemperatureReading> readings = responseEntity.getBody();
 
-    System.out.println(readings);
+    return readings;
   }
 
 }
