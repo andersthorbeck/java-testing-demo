@@ -16,6 +16,6 @@ dependencies {
     testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
     compile group:'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.2.RELEASE'
 
-    compile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: '4.0.4'
-    compile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: '4.0.4'
+    testCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: '4.0.4'
+    testCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: '4.0.4'
 }
