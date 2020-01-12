@@ -1,5 +1,8 @@
 package no.knowit.kds2020.grapher.pact.consumer;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpMethod.GET;
 
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
@@ -54,7 +57,8 @@ public class TemperatureApiPactConsumerTest {
   @PactVerification(PROVIDER_NAME)
   public void runTest() {
     List<TemperatureReading> readings = client.getAllTemperatureReadings();
-    System.out.println("Readings: " + readings);
+    assertThat(readings, hasSize(1));
+    assertThat(readings.get(0).getCelsius(), is(13.0));
   }
 
 }
