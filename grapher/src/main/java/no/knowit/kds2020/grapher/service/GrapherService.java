@@ -3,7 +3,6 @@ package no.knowit.kds2020.grapher.service;
 import static java.util.Comparator.reverseOrder;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import no.knowit.kds2020.grapher.client.TemperatureApiClient;
@@ -33,46 +32,52 @@ public class GrapherService {
             .map(TemperatureReading::getCelsius)
             .collect(Collectors.toList());
 
-    int minTemp = allTemperatures.stream().sorted().findFirst().map(Math::round).map(Math::toIntExact).get();
-    int maxTemp = allTemperatures.stream().sorted(reverseOrder()).findFirst().map(Math::round).map(Math::toIntExact).get();
+    int minTemp = allTemperatures.stream()
+        .sorted()
+        .findFirst()
+        .map(Math::round)
+        .map(Math::toIntExact)
+        .get();
+    int maxTemp = allTemperatures.stream()
+        .sorted(reverseOrder())
+        .findFirst()
+        .map(Math::round)
+        .map(Math::toIntExact)
+        .get();
     int maxDigits = Math.max(numDigits(maxTemp), numDigits(minTemp));
 
-    boolean positiveAndNegative = Math.abs(Math.signum(maxTemp) - Math.signum(minTemp)) > 1;
-    int extraRows = positiveAndNegative ? 3 : 2;
     int columnTotalWidth = maxDigits % 2 == 1 ? maxDigits : maxDigits + 1;
     int columnSpace = (columnTotalWidth - 1) / 2;
 
     StringBuilder graphBuilder = new StringBuilder();
-    // t is thermometer level, r is temperature reading
+    // t is thermometer level (graph row), r is temperature reading
     for (int t = maxTemp + 1; t >= minTemp - 1; t--) {
       graphBuilder.append(leftPad(t, maxDigits, ' '));
       graphBuilder.append(t == 0 ? '+' : '|');
       int finalT = t;
-      allTemperatures.stream().map(Math::round).map(Math::toIntExact).forEach(
-          new Consumer<Integer>() {
-            @Override
-            public void accept(Integer r) {
-              char padChar = finalT == 0 ? '-' : ' ';
-              if (finalT == r + nonZeroSignum(r)) {
-                graphBuilder.append(centerPad(r, columnTotalWidth, padChar));
-              } else if (finalT == r) {
-                graphBuilder
-                    .append(repeat(padChar, columnSpace))
-                    .append('*')
-                    .append(repeat(padChar, columnSpace));
-              } else if (finalT == 0) {
-                graphBuilder.append(repeat('-', columnTotalWidth));
-              } else if (Math.abs(finalT) <= Math.abs(r) && Math.signum(finalT) == Math.signum(r)) {
-                graphBuilder
-                    .append(repeat(' ', columnSpace))
-                    .append('|')
-                    .append(repeat(' ', columnSpace));
-              } else {
-                graphBuilder.append(repeat(' ', columnTotalWidth));
-              }
+      allTemperatures.stream()
+          .map(Math::round)
+          .map(Math::toIntExact)
+          .forEach((Integer r) -> {
+            char padChar = finalT == 0 ? '-' : ' ';
+            if (finalT == r + nonZeroSignum(r)) {
+              graphBuilder.append(centerPad(r, columnTotalWidth, padChar));
+            } else if (finalT == r) {
+              graphBuilder
+                  .append(repeat(padChar, columnSpace))
+                  .append('*')
+                  .append(repeat(padChar, columnSpace));
+            } else if (finalT == 0) {
+              graphBuilder.append(repeat('-', columnTotalWidth));
+            } else if (Math.abs(finalT) <= Math.abs(r) && Math.signum(finalT) == Math.signum(r)) {
+              graphBuilder
+                  .append(repeat(' ', columnSpace))
+                  .append('|')
+                  .append(repeat(' ', columnSpace));
+            } else {
+              graphBuilder.append(repeat(' ', columnTotalWidth));
             }
-          }
-      );
+          });
       graphBuilder.append('\n');
     }
 
