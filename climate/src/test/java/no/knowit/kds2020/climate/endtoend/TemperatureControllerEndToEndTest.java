@@ -1,4 +1,4 @@
-package no.knowit.kds2020.climate.api;
+package no.knowit.kds2020.climate.endtoend;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
