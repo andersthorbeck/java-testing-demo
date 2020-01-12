@@ -1,7 +1,9 @@
 package no.knowit.kds2020.climate.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,7 +11,11 @@ public class TemperatureReading {
   private final LocalDateTime timestamp;
   private final double celsius;
 
-  public TemperatureReading(LocalDateTime timestamp, double celsius) {
+  @JsonCreator
+  public TemperatureReading(
+      @JsonProperty("timestamp") LocalDateTime timestamp,
+      @JsonProperty("celsius") double celsius
+  ) {
     this.timestamp = timestamp;
     this.celsius = celsius;
   }
