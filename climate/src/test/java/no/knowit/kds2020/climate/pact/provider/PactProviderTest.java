@@ -6,37 +6,42 @@ import static org.mockito.Mockito.when;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactFolder;
-import au.com.dius.pact.provider.junit.target.HttpTarget;
-import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
+import au.com.dius.pact.provider.spring.target.MockMvcTarget;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import no.knowit.kds2020.climate.api.TemperatureController;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import no.knowit.kds2020.climate.service.TemperatureService;
+import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @RunWith(SpringRestPactRunner.class)
-@WebMvcTest
 @Provider(PROVIDER_NAME)
 @PactFolder("pacts")
+@WebMvcTest
 public class PactProviderTest {
 
-  private static final String CONSUMER_NAME = "grapher";
   static final String PROVIDER_NAME = "climate";
-
-  private static final String MOCK_SERVER_HOST = "localhost";
-  private static final int MOCK_SERVER_PORT = 1234;
-  private static final String MOCK_SERVER_URL =
-      "http://" + MOCK_SERVER_HOST + ":" + MOCK_SERVER_PORT;
 
   @MockBean
   private TemperatureService serviceMock;
 
+  @Autowired
+  private TemperatureController controller;
+
   @TestTarget
-  Target pactTestTarget = new HttpTarget(MOCK_SERVER_PORT);
+  public MockMvcTarget pactTestTarget = new MockMvcTarget();
+
+  @Before
+  public void setUp() {
+    pactTestTarget.setControllers(controller);
+    pactTestTarget.setPrintRequestResponse(true);
+  }
 
   @State("there exist a few temperature readings")
   public void prepareTemperatureReadings() {

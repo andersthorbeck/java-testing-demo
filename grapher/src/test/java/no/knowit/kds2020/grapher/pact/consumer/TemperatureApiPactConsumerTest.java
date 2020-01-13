@@ -44,9 +44,9 @@ public class TemperatureApiPactConsumerTest {
           .method(GET.toString())
         .willRespondWith()
           .status(200)
-          .body(LambdaDsl.newJsonArray(readings -> {
+          .body(LambdaDsl.newJsonArrayMinLike(1, readings -> {
             readings.object(reading -> {
-              reading.timestamp("timestamp");
+              reading.timestamp("timestamp", "yyyy-MM-dd'T'HH:mm:ss.SSS");
               reading.numberType("celsius", 13);
             });
           }).build())
