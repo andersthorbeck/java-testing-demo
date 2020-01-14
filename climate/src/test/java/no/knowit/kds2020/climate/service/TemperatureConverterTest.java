@@ -79,7 +79,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -236,9 +240,9 @@ public class TemperatureConverterTest {
     assertThat(" foo ", matchesPattern(" fo* "));
     assertThat(" foo ", matchesRegex(" fo* "));
 
-    assertThat(parseXml("<root><nested>foo</nested></root>"), hasXPath("/root/nested"));
-    assertThat(parseXml("<root><nested>foo</nested></root>"),
-        hasXPath("/root/nested", equalTo("foo")));
+    Document xmlDocument = parseXml("<root><nested>foo</nested></root>");
+    assertThat(xmlDocument, hasXPath("/root/nested"));
+    assertThat(xmlDocument, hasXPath("/root/nested", equalTo("foo")));
 
     // FileMatchers
     assertThat(new File("src/test/resources"), is(anExistingDirectory()));
@@ -248,6 +252,60 @@ public class TemperatureConverterTest {
   private static Document parseXml(String xml) throws Exception {
     return DocumentBuilderFactory.newInstance().newDocumentBuilder()
         .parse(new InputSource(new StringReader(xml)));
+  }
+
+  @Test
+  public void demonstrate_custom_hamcrest_matcher() {
+    assertThat(new Foo("a", "b", "x", "y"),
+        hasSameAbAs(new Foo("a", "b", "c", "d")));
+
+    assertThat(new Foo("a", "x", "c", "d"),
+        (hasSameAbAs(new Foo("a", "b", "c", "d"))));
+  }
+
+  private static class Foo {
+    String a, b, c, d;
+    Foo(String a, String b, String c, String d) {
+      this.a = a;
+      this.b = b;
+      this.c = c;
+      this.d = d;
+    }
+  }
+
+  private static Matcher<Foo> hasSameAbAs(Foo expected) {
+    return new FooAbMatcher(expected);
+  }
+
+  private static class FooAbMatcher extends TypeSafeDiagnosingMatcher<Foo> {
+    private final Foo expected;
+
+    FooAbMatcher(Foo expected) {
+      this.expected = expected;
+    }
+
+    @Override
+    protected boolean matchesSafely(Foo actual, Description mismatchDescription) {
+      if (Objects.equals(expected.a, actual.a)
+          && Objects.equals(expected.b, actual.b)) {
+        return true;
+      }
+      mismatchDescription
+          .appendText("a was ")
+          .appendValue(actual.a)
+          .appendText(", b was ")
+          .appendValue(actual.b);
+      return false;
+    }
+
+    @Override
+    public void describeTo(Description description) {
+      description
+          .appendText("Foo instance with a=")
+          .appendValue(expected.a)
+          .appendText(", and b=")
+          .appendValue(expected.b);
+    }
   }
 
 }
