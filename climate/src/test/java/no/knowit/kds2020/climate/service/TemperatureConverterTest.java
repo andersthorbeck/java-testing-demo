@@ -13,6 +13,8 @@ import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.blankOrNullString;
 import static org.hamcrest.Matchers.blankString;
 import static org.hamcrest.Matchers.both;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsInRelativeOrder;
@@ -24,6 +26,7 @@ import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.endsWithIgnoringCase;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.equalToCompressingWhiteSpace;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
@@ -36,17 +39,30 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasLength;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.hasValue;
+import static org.hamcrest.Matchers.hasXPath;
+import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.matchesPattern;
+import static org.hamcrest.Matchers.matchesRegex;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notANumber;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.oneOf;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.hamcrest.Matchers.stringContainsInOrder;
+import static org.hamcrest.Matchers.theInstance;
+import static org.hamcrest.Matchers.typeCompatibleWith;
+import static org.hamcrest.io.FileMatchers.aWritableFile;
+import static org.hamcrest.io.FileMatchers.anExistingDirectory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -57,11 +73,16 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 public class TemperatureConverterTest {
 
@@ -109,10 +130,11 @@ public class TemperatureConverterTest {
 
     Object object = new Object();
     assertThat(object, is(sameInstance(object)));
+    assertThat(object, is(theInstance(object)));
     assertThat(object, is(not(sameInstance(new Object()))));
 
     assertThat(null, is(nullValue()));
-    assertThat(object, is(not(nullValue())));
+    assertThat(object, is(notNullValue()));
 
     assertThat(0 < 1, is(true));
     assertThat(2 < 1, is(false));
@@ -133,6 +155,8 @@ public class TemperatureConverterTest {
     assertThat("Tom Marvolo Riddle", startsWith("Tom"));
     assertThat("Tom Marvolo Riddle", endsWith("Riddle"));
     assertThat("Tom Marvolo Riddle", containsString("Marvolo"));
+    assertThat("Tom Marvolo Riddle", startsWithIgnoringCase("tom"));
+    assertThat("Tom Marvolo Riddle", endsWithIgnoringCase("riddle"));
     assertThat("Tom Marvolo Riddle", containsStringIgnoringCase("marvolo"));
     assertThat("Tom Marvolo Riddle", stringContainsInOrder("Tom", "Riddle"));
     assertThat("Tom Marvolo Riddle", equalToIgnoringCase("tom marvolo riddle"));
@@ -162,6 +186,9 @@ public class TemperatureConverterTest {
         )
     );
     assertThat(set, containsInAnyOrder(1, 3, 2));
+
+    assertThat(2, is(oneOf(1, 2, 3)));
+    assertThat(2, is(in(Arrays.asList(1, 2, 3))));
 
     // maps
     Map<String, Integer> fruits = new HashMap<>();
@@ -193,6 +220,34 @@ public class TemperatureConverterTest {
     assertThat("foo", is(instanceOf(Object.class)));
     assertThat("foo", is(any(String.class)));
     assertThat("foo", isA(String.class));
+  }
+
+  @Test
+  public void demonstrate_niche_hamcrest_matchers() throws Exception {
+    assertThat(3.14, is(closeTo(Math.PI, 0.01)));
+    assertThat(1.0 % 0, is(notANumber()));
+
+    assertThat("foo", comparesEqualTo("foo"));
+
+    assertThat(true, hasToString("true"));
+
+    assertThat(String.class, is(typeCompatibleWith(CharSequence.class)));
+
+    assertThat(" foo ", matchesPattern(" fo* "));
+    assertThat(" foo ", matchesRegex(" fo* "));
+
+    assertThat(parseXml("<root><nested>foo</nested></root>"), hasXPath("/root/nested"));
+    assertThat(parseXml("<root><nested>foo</nested></root>"),
+        hasXPath("/root/nested", equalTo("foo")));
+
+    // FileMatchers
+    assertThat(new File("src/test/resources"), is(anExistingDirectory()));
+    assertThat(new File("non-existent"), is(not(aWritableFile())));
+  }
+
+  private static Document parseXml(String xml) throws Exception {
+    return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        .parse(new InputSource(new StringReader(xml)));
   }
 
 }
