@@ -71,7 +71,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.w3c.dom.Node.TEXT_NODE;
+import static org.xmlunit.diff.ComparisonType.ATTR_VALUE;
+import static org.xmlunit.diff.DifferenceEvaluators.chain;
+import static org.xmlunit.diff.DifferenceEvaluators.downgradeDifferencesToEqual;
+import static org.xmlunit.diff.DifferenceEvaluators.ignorePrologDifferences;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -80,12 +88,16 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xmlunit.builder.Input;
+import org.xmlunit.matchers.EvaluateXPathMatcher;
+import org.xmlunit.matchers.HasXPathMatcher;
 
 public class HamcrestDemonstration {
 
@@ -223,9 +235,9 @@ public class HamcrestDemonstration {
     assertThat(" foo ", matchesPattern(" fo* "));
     assertThat(" foo ", matchesRegex(" fo* "));
 
-    Document xmlDocument = parseXml("<root><nested>foo</nested></root>");
-    assertThat(xmlDocument, hasXPath("/root/nested"));
-    assertThat(xmlDocument, hasXPath("/root/nested", equalTo("foo")));
+    Document xmlDocument = parseXml("<foo><bar>baz</bar></foo>");
+    assertThat(xmlDocument, hasXPath("/foo/bar"));
+    assertThat(xmlDocument, hasXPath("/foo/bar", equalTo("baz")));
 
     // FileMatchers
     assertThat(new File("src/test/resources"), is(anExistingDirectory()));
@@ -238,12 +250,61 @@ public class HamcrestDemonstration {
   }
 
   @Test
+  public void demonstrate_external_xml_hamcrest_matchers() throws Exception {
+    String xml = "<foo> <bar> baz qux </bar> </foo>";
+    assertThat(parseXml(xml), HasXPathMatcher.hasXPath("/foo/bar"));
+    assertThat(xml, HasXPathMatcher.hasXPath("/foo/bar"));
+    assertThat(xml.getBytes(), HasXPathMatcher.hasXPath("/foo/bar"));
+    assertThat(new StreamSource(new StringReader(xml)), HasXPathMatcher.hasXPath("/foo/bar"));
+    assertThat(new ByteArrayInputStream(xml.getBytes()), HasXPathMatcher.hasXPath("/foo/bar"));
+    assertThat(Input.fromString(xml), HasXPathMatcher.hasXPath("/foo/bar"));
+
+    assertThat(xml, EvaluateXPathMatcher.hasXPath("/foo/bar", equalToCompressingWhiteSpace("baz  qux")));
+
+    assertThat(xml, isIdenticalTo("<foo> <bar> baz qux </bar> </foo>"));
+    assertThat(xml, isIdenticalTo("<foo><bar>baz qux</bar></foo>").ignoreWhitespace());
+    assertThat(xml, isIdenticalTo("<foo><bar> baz qux </bar></foo>").ignoreElementContentWhitespace());
+    assertThat(xml, isIdenticalTo("<foo> <bar> baz <!-- quux -->qux </bar> </foo>").ignoreComments());
+    assertThat(xml, isIdenticalTo("<foo><bar>baz \t\n qux</bar></foo>").normalizeWhitespace());
+
+    assertThat(xml, isSimilarTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + xml));
+    assertThat("<foo>bar</foo>", isSimilarTo("<foo><![CDATA[bar]]></foo>"));
+    assertThat("<foo:baz xmlns:foo=\"foobar\"/>",
+        isSimilarTo("<bar:baz xmlns:bar=\"foobar\"/>"));
+
+    assertThat(xml,
+        isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + xml)
+            .withDifferenceEvaluator(ignorePrologDifferences())
+    );
+    assertThat("<foo bar=\"baz\"/>",
+        isIdenticalTo("<foo bar=\"qux\"/>")
+            .withDifferenceEvaluator(downgradeDifferencesToEqual(ATTR_VALUE))
+    );
+    assertThat("<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo bar=\"baz\"/>",
+        isIdenticalTo("<foo bar=\"qux\"/>")
+            .withDifferenceEvaluator(chain(
+                ignorePrologDifferences(),
+                downgradeDifferencesToEqual(ATTR_VALUE)))
+    );
+
+    assertThat("<foo bar=\"baz\"/>",
+        isIdenticalTo("<foo bar=\"qux\"/>")
+            .withAttributeFilter(attr -> !attr.getName().equals("bar"))
+    );
+    assertThat("<foo>bar</foo>",
+        isIdenticalTo("<foo>baz</foo>")
+            .withNodeFilter(node ->
+                node.getNodeType() == TEXT_NODE && node.getTextContent().contains("ba"))
+    );
+  }
+
+  @Test
   public void demonstrate_custom_hamcrest_matcher() {
     assertThat(new Foo("a", "b", "x", "y"),
         hasSameAbAs(new Foo("a", "b", "c", "d")));
 
     assertThat(new Foo("a", "x", "c", "d"),
-        (hasSameAbAs(new Foo("a", "b", "c", "d"))));
+        not(hasSameAbAs(new Foo("a", "b", "c", "d"))));
   }
 
   private static class Foo {

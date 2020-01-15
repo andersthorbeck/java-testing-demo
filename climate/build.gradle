@@ -27,4 +27,5 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
 
     testCompile group: 'au.com.dius', name: 'pact-jvm-provider-spring', version: '4.0.4'
+    testCompile group: 'org.xmlunit', name: 'xmlunit-matchers', version: '2.6.3'
 }
