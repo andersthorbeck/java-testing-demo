@@ -14,7 +14,6 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -27,9 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-//@JdbcTest
-//@AutoConfigureTestDatabase(replace = Replace.NONE)
+@SpringBootTest
 @TestExecutionListeners(
     listeners = FlywayTestExecutionListener.class,
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
