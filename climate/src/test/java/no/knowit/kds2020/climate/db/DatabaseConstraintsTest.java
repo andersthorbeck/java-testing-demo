@@ -5,7 +5,6 @@ import static no.knowit.kds2020.climate.db.TemperatureRepository.toSqlTimestamp;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
-import no.knowit.kds2020.climate.Application;
 import org.flywaydb.test.FlywayTestExecutionListener;
 import org.flywaydb.test.annotation.FlywayTest;
 import org.jetbrains.annotations.NotNull;
