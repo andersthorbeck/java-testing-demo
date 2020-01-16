@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.is;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import no.knowit.kds2020.climate.Application;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.flywaydb.test.FlywayTestExecutionListener;
 import org.flywaydb.test.annotation.FlywayTest;
@@ -20,9 +19,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestExecutionListeners.MergeMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest
 @TestExecutionListeners(
     listeners = FlywayTestExecutionListener.class,
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
@@ -32,6 +30,13 @@ public class TemperatureRepositoryTestWithExternalDb {
 
   @Autowired
   TemperatureRepository repository;
+
+  /**
+   * Start temporary external containerized database with:
+   *   $ docker run -u postgres -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9
+   * If required, open psql REPL to run manual SQL against that database with:
+   *   $ psql -h localhost -U postgres
+   */
 
   @Test
   @FlywayTest(locationsForMigrate = "seed")
