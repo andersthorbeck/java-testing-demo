@@ -18,6 +18,8 @@ import java.util.List;
 import no.knowit.kds2020.climate.db.TemperatureRepository;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mockito;
 
 public class TemperatureServiceTest {
 
@@ -55,13 +57,22 @@ public class TemperatureServiceTest {
   }
 
   @Test
-  public void storeCurrentTemperatureFromFahrenheit_should_convert_then_store() {
+  public void storeCurrentTemperatureFromFahrenheit_store_result_of_conversion() {
     when(converterMock.fahrenheitToCelsius(anyDouble()))
         .thenReturn(10.0);
 
     service.storeCurrentTemperatureFromFahrenheit(100.0);
 
     verify(repositoryMock).storeReading(argThat(reading -> reading.getCelsius() == 10.0));
+  }
+
+  @Test
+  public void storeCurrentTemperatureFromFahrenheit_should_convert_then_store() {
+    service.storeCurrentTemperatureFromFahrenheit(100.0);
+
+    InOrder inOrder = Mockito.inOrder(converterMock, repositoryMock);
+    inOrder.verify(converterMock).fahrenheitToCelsius(anyDouble());
+    inOrder.verify(repositoryMock).storeReading(any());
   }
 
   @Test
