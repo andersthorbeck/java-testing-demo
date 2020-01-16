@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -80,14 +81,14 @@ public class DatabaseConstraintsTest {
   @Test(expected = DataIntegrityViolationException.class)
   public void datetime_must_be_timestamp() {
     MapSqlParameterSource params = createDefaultParameters();
-    params.addValue("datetime", "foo", Types.VARCHAR);
+    params.addValue("datetime", "noon today", Types.TIMESTAMP);
     performInsert(params);
   }
 
-  @Test(expected = DataIntegrityViolationException.class)
+  @Test(expected = BadSqlGrammarException.class)
   public void celsius_must_be_number() {
     MapSqlParameterSource params = createDefaultParameters();
-    params.addValue("celsius", "foo", Types.VARCHAR);
+    params.addValue("celsius", "twenty", Types.DOUBLE);
     performInsert(params);
   }
 
