@@ -38,4 +38,9 @@ public class TemperatureService {
   public void storeCurrentTemperatureFromFahrenheit(double fahrenheit) {
     storeCurrentTemperature(converter.fahrenheitToCelsius(fahrenheit));
   }
+
+  public void storeCurrentRoundedTemperatureFromFahrenheit(double fahrenheit) {
+    storeCurrentTemperatureFromFahrenheit(Math.round(fahrenheit));
+  }
+
 }

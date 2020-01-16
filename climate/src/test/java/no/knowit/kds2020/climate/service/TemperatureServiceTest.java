@@ -18,6 +18,7 @@ import java.util.List;
 import no.knowit.kds2020.climate.db.TemperatureRepository;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
@@ -80,6 +81,21 @@ public class TemperatureServiceTest {
     service.storeCurrentTemperature(5);
 
     verify(repositoryMock).storeReading(new TemperatureReading(NOW, 5));
+  }
+
+  // TODO: Better ArgumentCaptor test
+  @Test
+  public void storeCurrentRoundedTemperatureFromFahrenheit_should_round_then_convert_then_store() {
+    when(converterMock.fahrenheitToCelsius(anyDouble()))
+        .thenCallRealMethod();
+
+    service.storeCurrentRoundedTemperatureFromFahrenheit(32.4);
+
+    ArgumentCaptor<TemperatureReading> readingCaptor =
+        ArgumentCaptor.forClass(TemperatureReading.class);
+
+    verify(repositoryMock).storeReading(readingCaptor.capture());
+    assertThat(readingCaptor.getValue().getCelsius(), is(0.0));
   }
 
 }
