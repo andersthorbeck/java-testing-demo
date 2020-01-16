@@ -1,5 +1,6 @@
 package no.knowit.kds2020.climate.service;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import no.knowit.kds2020.climate.db.TemperatureRepository;
@@ -12,12 +13,15 @@ public class TemperatureService {
 
   private final TemperatureConverter converter;
   private final TemperatureRepository repository;
+  private final Clock clock;
 
   @Autowired
   public TemperatureService(
+      Clock clock,
       TemperatureConverter converter,
       TemperatureRepository repository
   ) {
+    this.clock = clock;
     this.converter = converter;
     this.repository = repository;
   }
@@ -27,7 +31,8 @@ public class TemperatureService {
   }
 
   public void storeCurrentTemperature(double celsius) {
-    repository.storeReading(new TemperatureReading(LocalDateTime.now(), celsius));
+//    repository.storeReading(new TemperatureReading(LocalDateTime.now(), celsius));
+    repository.storeReading(new TemperatureReading(LocalDateTime.now(clock), celsius));
   }
 
   public void storeCurrentTemperatureFromFahrenheit(double fahrenheit) {
