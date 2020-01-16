@@ -119,6 +119,11 @@ public class HamcrestDemonstration {
     assertThrows(Exception.class, () -> {throw new Exception();});
   }
 
+  @Test(expected = NullPointerException.class)
+  public void demonstrate_old_junit_expected_exception() {
+    throw new NullPointerException();
+  }
+
   @Test
   public void demonstrate_hamcrest_matchers() {
     assertThat("foo", equalTo("foo"));
