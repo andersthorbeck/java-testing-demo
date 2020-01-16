@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import javax.validation.ConstraintViolationException;
 import no.knowit.kds2020.climate.db.TemperatureRepository;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.junit.Test;
@@ -129,6 +131,17 @@ public class TemperatureServiceTest {
     service.storeCurrentTemperatureFromFahrenheit(100);
 
     verify(repositoryMock).storeReading(new TemperatureReading(NOW, 200));
+  }
+
+  @Test(expected = ConstraintViolationException.class)
+  public void mocking_void_methods() {
+//    when(repositoryMock.storeReading(any()))
+//        .thenThrow(ConstraintViolationException.class);
+
+    doThrow(ConstraintViolationException.class)
+        .when(repositoryMock).storeReading(any());
+
+    service.storeCurrentTemperature(3.0);
   }
 
 }
