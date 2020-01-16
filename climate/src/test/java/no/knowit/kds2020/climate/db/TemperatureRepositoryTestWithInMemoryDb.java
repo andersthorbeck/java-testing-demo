@@ -21,11 +21,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureTestDatabase
+//@JdbcTest
 @TestExecutionListeners(
     listeners = FlywayTestExecutionListener.class,
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
 )
-@AutoConfigureTestDatabase
 public class TemperatureRepositoryTestWithInMemoryDb {
 
   // TODO: Figure out how to manually specify H2 config?
