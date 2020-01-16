@@ -224,4 +224,6 @@ public class TemperatureServiceTest {
     BDDMockito.then(repositoryMock).should().storeReading(any());
   }
 
+  // TODO: Demo argument matchers, including MockitoHamcrest.argThat
+
 }
