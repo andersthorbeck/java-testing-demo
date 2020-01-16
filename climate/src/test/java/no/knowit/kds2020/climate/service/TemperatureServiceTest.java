@@ -13,6 +13,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.time.Clock;
@@ -164,6 +166,20 @@ public class TemperatureServiceTest {
 
     assertThat(converterSpy.celsiusToFahrenheit(0.0), is(32.0));
     assertThat(converterSpy.fahrenheitToCelsius(32.0), is(999.0));
+  }
+
+  @Test
+  public void demo_verify_no_interactions() {
+    when(converterMock.fahrenheitToCelsius(anyDouble()))
+        .thenThrow(new RuntimeException());
+
+    assertThrows(RuntimeException.class, () -> {
+      service.storeCurrentTemperatureFromFahrenheit(100);
+    });
+
+    verify(converterMock).fahrenheitToCelsius(100);
+    verifyNoMoreInteractions(converterMock);
+    verifyNoInteractions(repositoryMock);
   }
 
 }
