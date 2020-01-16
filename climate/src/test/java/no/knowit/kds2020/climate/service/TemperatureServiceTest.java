@@ -8,8 +8,10 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -134,7 +136,7 @@ public class TemperatureServiceTest {
   }
 
   @Test(expected = ConstraintViolationException.class)
-  public void mocking_void_methods() {
+  public void demo_mocking_void_methods() {
 //    when(repositoryMock.storeReading(any()))
 //        .thenThrow(ConstraintViolationException.class);
 
@@ -142,6 +144,16 @@ public class TemperatureServiceTest {
         .when(repositoryMock).storeReading(any());
 
     service.storeCurrentTemperature(3.0);
+  }
+
+  @Test
+  public void demo_using_spy_and_doReturn() {
+    TemperatureConverter converterSpy = spy(new TemperatureConverter());
+    doReturn(999.0)
+        .when(converterSpy).fahrenheitToCelsius(anyDouble());
+
+    assertThat(converterSpy.celsiusToFahrenheit(0.0), is(32.0));
+    assertThat(converterSpy.fahrenheitToCelsius(32.0), is(999.0));
   }
 
 }
