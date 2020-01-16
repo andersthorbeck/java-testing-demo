@@ -11,6 +11,7 @@ import no.knowit.kds2020.climate.Application;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.flywaydb.test.FlywayTestExecutionListener;
 import org.flywaydb.test.annotation.FlywayTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
     listeners = FlywayTestExecutionListener.class,
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
 )
+@Ignore("requires a running DB reachable via the datasource config")
 public class TemperatureRepositoryTestWithExternalDb {
 
   @Autowired
