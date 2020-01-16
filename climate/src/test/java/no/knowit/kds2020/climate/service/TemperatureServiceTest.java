@@ -11,7 +11,9 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -180,6 +182,18 @@ public class TemperatureServiceTest {
     verify(converterMock).fahrenheitToCelsius(100);
     verifyNoMoreInteractions(converterMock);
     verifyNoInteractions(repositoryMock);
+  }
+
+  @Test
+  public void demo_num_invocations_verification() {
+    service.storeTemperatures(
+        new TemperatureReading(NOW, 10),
+        new TemperatureReading(NOW.plusHours(1), 15),
+        new TemperatureReading(NOW.plusHours(2), 20)
+    );
+
+    verify(repositoryMock, times(3)).storeReading(any());
+    verify(repositoryMock, never()).fetchAllTemperatures();
   }
 
 }

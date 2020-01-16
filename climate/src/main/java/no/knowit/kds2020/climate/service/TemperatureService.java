@@ -43,4 +43,10 @@ public class TemperatureService {
     storeCurrentTemperatureFromFahrenheit(Math.round(fahrenheit));
   }
 
+  public void storeTemperatures(TemperatureReading... readings) {
+    for (TemperatureReading reading : readings) {
+      repository.storeReading(reading);
+    }
+  }
+
 }
