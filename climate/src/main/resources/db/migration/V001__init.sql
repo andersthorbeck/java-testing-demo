@@ -1,4 +1,4 @@
 CREATE TABLE temperature (
-  datetime TIMESTAMP NOT NULL,
-  celsius REAL NOT NULL
+  datetime TIMESTAMP UNIQUE NOT NULL,
+  celsius REAL NOT NULL CHECK (celsius >= -273.15)
 );

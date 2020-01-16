@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("SqlNoDataSourceInspection")
 @Repository
@@ -28,6 +29,7 @@ public class TemperatureRepository {
     this.jdbcTemplate = jdbcTemplate;
   }
 
+  @Transactional
   public void storeReading(TemperatureReading reading) {
     String query = "INSERT INTO temperature(datetime, celsius) VALUES (:datetime, :celsius)";
 
@@ -54,11 +56,11 @@ public class TemperatureRepository {
     return jdbcTemplate.query(query, params, rowMapper);
   }
 
-  private Timestamp toSqlTimestamp(LocalDateTime dateTime) {
+  static Timestamp toSqlTimestamp(LocalDateTime dateTime) {
     return Timestamp.valueOf(dateTime);
   }
 
-  private LocalDateTime toLocalDateTime(Timestamp timestamp) {
+  private static LocalDateTime toLocalDateTime(Timestamp timestamp) {
     return timestamp.toLocalDateTime();
   }
 }
