@@ -5,6 +5,7 @@ import static no.knowit.kds2020.climate.db.TemperatureRepository.toSqlTimestamp;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
+import no.knowit.kds2020.climate.Application;
 import org.flywaydb.test.FlywayTestExecutionListener;
 import org.flywaydb.test.annotation.FlywayTest;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -25,7 +27,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @RunWith(SpringRunner.class)
-@JdbcTest
+@SpringBootTest(classes = Application.class)
+//@JdbcTest
+//@AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestExecutionListeners(
     listeners = FlywayTestExecutionListener.class,
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
