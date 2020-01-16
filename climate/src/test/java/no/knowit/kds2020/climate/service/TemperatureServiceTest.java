@@ -196,4 +196,21 @@ public class TemperatureServiceTest {
     verify(repositoryMock, never()).fetchAllTemperatures();
   }
 
+  @Test
+  public void demo_of_consecutive_stubbing() {
+    when(converterMock.fahrenheitToCelsius(anyDouble()))
+        .thenReturn(1.0, 2.0)
+        .thenReturn(3.0);
+
+    service.storeCurrentTemperatureFromFahrenheit(9);
+    service.storeCurrentTemperatureFromFahrenheit(8);
+    service.storeCurrentTemperatureFromFahrenheit(7);
+    service.storeCurrentTemperatureFromFahrenheit(6);
+
+    InOrder inOrder = Mockito.inOrder(repositoryMock);
+    inOrder.verify(repositoryMock).storeReading(new TemperatureReading(NOW, 1.0));
+    inOrder.verify(repositoryMock).storeReading(new TemperatureReading(NOW, 2.0));
+    inOrder.verify(repositoryMock, times(2)).storeReading(new TemperatureReading(NOW, 3.0));
+  }
+
 }
