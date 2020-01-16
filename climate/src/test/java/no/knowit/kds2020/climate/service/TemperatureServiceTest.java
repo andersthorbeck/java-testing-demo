@@ -45,6 +45,7 @@ public class TemperatureServiceTest {
       new TemperatureService(FIXED_CLOCK, converterMock, repositoryMock);
 
   @Test
+  /** when: mocking method behaviour */
   public void getAllTemperatureReadings_should_fetch_from_database() {
     LocalDateTime now = LocalDateTime.now();
     List<TemperatureReading> expectedReadings =
@@ -59,6 +60,7 @@ public class TemperatureServiceTest {
   }
 
   @Test
+  /** verify: asserting that expected method calls are made */
   public void storeCurrentTemperature_should_delegate_to_database() {
     service.storeCurrentTemperature(5);
 
@@ -66,6 +68,8 @@ public class TemperatureServiceTest {
   }
 
   @Test
+  /** combining mocking and verification
+    * argThat: user-defined argument matcher */
   public void storeCurrentTemperatureFromFahrenheit_store_result_of_conversion() {
     when(converterMock.fahrenheitToCelsius(anyDouble()))
         .thenReturn(10.0);
@@ -76,6 +80,7 @@ public class TemperatureServiceTest {
   }
 
   @Test
+  /** inOrder: verifying expected order of method calls */
   public void storeCurrentTemperatureFromFahrenheit_should_convert_then_store() {
     service.storeCurrentTemperatureFromFahrenheit(100.0);
 
@@ -85,6 +90,7 @@ public class TemperatureServiceTest {
   }
 
   @Test
+  /** Clock: allowing predictable tests involving time comparisons */
   public void use_fixed_clock_for_time_comparison() {
     service.storeCurrentTemperature(5);
 
@@ -93,6 +99,9 @@ public class TemperatureServiceTest {
 
   // TODO: Better ArgumentCaptor test
   @Test
+  /** thenCallRealMethod: calling real method implementation, not default mock implementation
+    * ArgumentCaptor: capturing arguments passed to (verified) method calls,
+    *                 for additional assertion */
   public void storeCurrentRoundedTemperatureFromFahrenheit_should_round_then_convert_then_store() {
     when(converterMock.fahrenheitToCelsius(anyDouble()))
         .thenCallRealMethod();
@@ -107,6 +116,7 @@ public class TemperatureServiceTest {
   }
 
   @Test
+  /** thenThrow: mock that method invocation throws exception */
   public void storeCurrentTemperatureFromFahrenheit_should_propagate_conversion_exception() {
     when(converterMock.fahrenheitToCelsius(anyDouble()))
         .thenThrow(new IllegalArgumentException());
