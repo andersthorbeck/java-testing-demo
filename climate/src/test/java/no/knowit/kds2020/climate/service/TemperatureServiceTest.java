@@ -49,7 +49,7 @@ public class TemperatureServiceTest {
       new TemperatureService(FIXED_CLOCK, converterMock, repositoryMock);
 
   @Test
-  /** when: mocking method behaviour */
+  /** when: stubbing method behaviour */
   public void getAllTemperatureReadings_should_fetch_from_database() {
     LocalDateTime now = LocalDateTime.now();
     List<TemperatureReading> expectedReadings =
@@ -72,7 +72,7 @@ public class TemperatureServiceTest {
   }
 
   @Test
-  /** combining mocking and verification
+  /** combining stubbing and verification
     * argThat: user-defined argument matcher */
   public void storeCurrentTemperatureFromFahrenheit_store_result_of_conversion() {
     when(converterMock.fahrenheitToCelsius(anyDouble()))
@@ -103,7 +103,7 @@ public class TemperatureServiceTest {
 
   // TODO: Better ArgumentCaptor test
   @Test
-  /** thenCallRealMethod: calling real method implementation, not default mock implementation
+  /** thenCallRealMethod: calling real method implementation, not default stub implementation
     * ArgumentCaptor: capturing arguments passed to (verified) method calls,
     *                 for additional assertion */
   public void storeCurrentRoundedTemperatureFromFahrenheit_should_round_then_convert_then_store() {
@@ -120,7 +120,7 @@ public class TemperatureServiceTest {
   }
 
   @Test
-  /** thenThrow: mock that method invocation throws exception */
+  /** thenThrow: stub that method invocation throws exception */
   public void storeCurrentTemperatureFromFahrenheit_should_propagate_conversion_exception() {
     when(converterMock.fahrenheitToCelsius(anyDouble()))
         .thenThrow(new IllegalArgumentException());
@@ -150,7 +150,7 @@ public class TemperatureServiceTest {
   }
 
   @Test(expected = ConstraintViolationException.class)
-  public void demo_mocking_void_methods() {
+  public void demo_stubbing_void_methods() {
 //    when(repositoryMock.storeReading(any()))
 //        .thenThrow(ConstraintViolationException.class);
 
