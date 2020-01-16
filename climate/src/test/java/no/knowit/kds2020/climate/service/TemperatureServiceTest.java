@@ -4,6 +4,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -96,6 +97,16 @@ public class TemperatureServiceTest {
 
     verify(repositoryMock).storeReading(readingCaptor.capture());
     assertThat(readingCaptor.getValue().getCelsius(), is(0.0));
+  }
+
+  @Test
+  public void storeCurrentTemperatureFromFahrenheit_should_propagate_conversion_exception() {
+    when(converterMock.fahrenheitToCelsius(anyDouble()))
+        .thenThrow(new IllegalArgumentException());
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      service.storeCurrentTemperatureFromFahrenheit(-10000);
+    });
   }
 
 }
