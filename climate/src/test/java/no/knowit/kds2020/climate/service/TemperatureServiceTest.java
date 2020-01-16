@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.List;
 import no.knowit.kds2020.climate.db.TemperatureRepository;
 import no.knowit.kds2020.climate.model.TemperatureReading;
@@ -22,6 +23,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public class TemperatureServiceTest {
 
@@ -107,6 +110,25 @@ public class TemperatureServiceTest {
     assertThrows(IllegalArgumentException.class, () -> {
       service.storeCurrentTemperatureFromFahrenheit(-10000);
     });
+  }
+
+  @Test
+  public void demo_of_Mockito_Answer() {
+    when(converterMock.fahrenheitToCelsius(anyDouble()))
+        .thenAnswer((Answer<Double>) (InvocationOnMock invocation) -> {
+          System.out.println("Answer for call to "
+              + invocation.getMock().getClass().getSimpleName()+ "."
+              + invocation.getMethod().getName() + "()"
+              + " with arguments "
+              + Arrays.asList(invocation.getArguments()));
+
+          double arg0 = invocation.getArgument(0);
+          return 2 * arg0;
+        });
+
+    service.storeCurrentTemperatureFromFahrenheit(100);
+
+    verify(repositoryMock).storeReading(new TemperatureReading(NOW, 200));
   }
 
 }
