@@ -29,6 +29,7 @@ import no.knowit.kds2020.climate.db.TemperatureRepository;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.BDDMockito;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -211,6 +212,16 @@ public class TemperatureServiceTest {
     inOrder.verify(repositoryMock).storeReading(new TemperatureReading(NOW, 1.0));
     inOrder.verify(repositoryMock).storeReading(new TemperatureReading(NOW, 2.0));
     inOrder.verify(repositoryMock, times(2)).storeReading(new TemperatureReading(NOW, 3.0));
+  }
+
+  @Test
+  public void demo_BDDMockito_for_behaviour_driven_development_tests() {
+    BDDMockito.given(converterMock.fahrenheitToCelsius(anyDouble()))
+        .willReturn(10.0);
+
+    service.storeCurrentTemperatureFromFahrenheit(100.0);
+
+    BDDMockito.then(repositoryMock).should().storeReading(any());
   }
 
 }
