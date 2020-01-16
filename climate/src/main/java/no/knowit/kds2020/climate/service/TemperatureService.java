@@ -10,10 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class TemperatureService {
 
+  private final TemperatureConverter converter;
   private final TemperatureRepository repository;
 
   @Autowired
-  public TemperatureService(TemperatureRepository repository) {
+  public TemperatureService(
+      TemperatureConverter converter,
+      TemperatureRepository repository
+  ) {
+    this.converter = converter;
     this.repository = repository;
   }
 
@@ -23,5 +28,9 @@ public class TemperatureService {
 
   public void storeCurrentTemperature(double celsius) {
     repository.storeReading(new TemperatureReading(LocalDateTime.now(), celsius));
+  }
+
+  public void storeCurrentTemperatureFromFahrenheit(double fahrenheit) {
+    storeCurrentTemperature(converter.fahrenheitToCelsius(fahrenheit));
   }
 }
