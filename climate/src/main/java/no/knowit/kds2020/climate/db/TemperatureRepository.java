@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+@SuppressWarnings("SqlNoDataSourceInspection")
 @Repository
 public class TemperatureRepository {
 
@@ -25,6 +26,16 @@ public class TemperatureRepository {
 
   public TemperatureRepository(NamedParameterJdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
+  }
+
+  public void storeReading(TemperatureReading reading) {
+    String query = "INSERT INTO temperature(datetime, celsius) VALUES (:datetime, :celsius)";
+
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("datetime", toSqlTimestamp(reading.getTimestamp()), Types.TIMESTAMP);
+    params.addValue("celsius", reading.getCelsius(), Types.DOUBLE);
+
+    jdbcTemplate.update(query, params);
   }
 
   public List<TemperatureReading> fetchAllTemperatures() {

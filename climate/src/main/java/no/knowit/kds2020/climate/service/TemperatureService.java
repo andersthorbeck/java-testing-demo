@@ -1,5 +1,6 @@
 package no.knowit.kds2020.climate.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import no.knowit.kds2020.climate.db.TemperatureRepository;
 import no.knowit.kds2020.climate.model.TemperatureReading;
@@ -18,5 +19,9 @@ public class TemperatureService {
 
   public List<TemperatureReading> getAllTemperatureReadings() {
     return repository.fetchAllTemperatures();
+  }
+
+  public void storeCurrentTemperature(double celsius) {
+    repository.storeReading(new TemperatureReading(LocalDateTime.now(), celsius));
   }
 }
