@@ -26,6 +26,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @WebMvcTest
 public class PactProviderTest {
 
+  /**
+   * Steps to test consumer contract:
+   * 1. Consumer generates pact, by running TemperatureApiPactConsumerTest.
+   * 2. Pact is made available to provider, by copying it to the appropriate folder:
+   *    $ cp -r ../grapher/target/pacts/ src/test/resources/pacts/
+   * 3. Provider tests consumer expectations are met by running this test class.
+   */
+
   static final String PROVIDER_NAME = "climate";
 
   @MockBean
@@ -52,5 +60,16 @@ public class PactProviderTest {
             new TemperatureReading(now, 22)
         ));
   }
+
+  /**
+   * Steps to run an ephemeral pact broker:
+   * 1. Check out git repository https://github.com/pact-foundation/pact-broker-docker
+   * 2. In said repository, run:
+   *    $ PACT_BROKER_DATABASE_ADAPTER=sqlite \
+          PACT_BROKER_DATABASE_NAME=pact_broker.sqlite \
+          ./script/test.sh
+   * 3. Access your local dockerized pact provider at:
+   *      http://localhost:9292/
+   */
 
 }
