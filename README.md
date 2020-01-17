@@ -59,3 +59,30 @@ Gives the consumer a veto on changes to the provider, so it is best used when bo
 
 See `TemperatureApiPactConsumerTest` in the `grapher` application, and `PactProviderTest` in the `climate` application.
 
+## Running the applications
+
+To manually run and test the applications in their entirety, follow these steps.
+
+1. Start a local containerized database.
+   The details must match the datasource values in the `application.properties` resource file of the `climate` application.
+
+        $ docker run -u postgres -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9
+
+   If you want to connect to the database to perform manual SQL queries, run:
+
+        $ psql -h localhost -U postgres
+
+2. Populate the database with some temperatures.
+   Run the "test" in `ManuallySeedDatabaseScript` in the `climate` application.
+
+3. Start the `climate` application (the provider).
+
+        $ ./gradlew bootRun
+
+4. Start the `grapher` application (the consumer).
+
+        $ ./gradlew bootRun
+
+5. Request that the grapher graph the temperatures from the climate application.
+
+        $ curl http://localhost:8081/graph

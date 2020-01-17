@@ -16,10 +16,10 @@ public class GrapherController {
   }
 
   @GetMapping("/graph")
-  public void drawTemperatureGraph() {
+  public String drawTemperatureGraph() {
     String graph = service.generateTemperatureGraph();
 
-    System.out.println(graph);
+    return graph;
   }
 
 }
