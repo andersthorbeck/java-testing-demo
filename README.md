@@ -2,6 +2,7 @@
 This repository demonstrates various techniques for testing the different layers of Java applications.
 The concepts are transferrable to other languages, but most of the demonstrated libraries and frameworks are exclusive to the JVM.
 
+Browse the test code to see the demos.
 Unless otherwise specified, the relevant demo code is in the `climate` application.
 
 ## Libraries
