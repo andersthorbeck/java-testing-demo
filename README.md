@@ -11,6 +11,8 @@ The core testing framework for Java, which all the other libraries fit into.
 
 ### Hamcrest
 A matching library, for checking whether values meet expectations.
+Has been ported to many other languages: Python, Ruby, Objective-C, PHP, Erlang, Swift.
+The XMLUnit plugin is also available in .NET.
 
 See `TemperatureConverterTest` and `HamcrestDemonstration`.
 
@@ -56,6 +58,9 @@ If the expectations fail, the test fails.
 
 Useful for ensuring an API provider cannot inadvertently break behaviour that a consumer of that API depends on.
 Gives the consumer a veto on changes to the provider, so it is best used when both consumer and provider are controlled by the same organization/people.
+
+Implemented natively for a variety of languages: JVM, Ruby, .NET, Javascript, Go, Python, Swift, PHP.
+Can also be used to a lesser extent with languages not directly supported.
 
 See `TemperatureApiPactConsumerTest` in the `grapher` application, and `PactProviderTest` in the `climate` application.
 
