@@ -12,20 +12,29 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.13'
-    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.2.4'
-    testCompile group: 'org.testcontainers', name: 'testcontainers', version:'1.12.4'
-    testCompile group: 'org.testcontainers', name: 'postgresql', version:'1.12.4'
+    /* Main dependencies */
+    compile group:'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.2.RELEASE'
+    compile group:'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.2.2.RELEASE'
     compile group: 'org.flywaydb', name: 'flyway-core', version: '6.1.4'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.9'
 
-    compile group:'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.2.2.RELEASE'
-    compile group:'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.2.RELEASE'
-    testCompile group:'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.2.RELEASE'
-    testCompile group: 'org.flywaydb.flyway-test-extensions', name: 'flyway-spring-test', version: '6.1.0'
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-
-    testCompile group: 'au.com.dius', name: 'pact-jvm-provider-spring', version: '4.0.4'
+    /* Test dependencies */
+    // Testing framework relied on by everything else
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+    // Value matching
+    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
     testCompile group: 'org.xmlunit', name: 'xmlunit-matchers', version: '2.6.3'
+    // Interaction verification
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.2.4'
+    // Annotation for automatic Flyway migration in tests
+    testCompile group: 'org.flywaydb.flyway-test-extensions', name: 'flyway-spring-test', version: '6.1.0'
+    // Embedded in-memory database for testing
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    // Local containerized PostgreSQL container
+    testCompile group: 'org.testcontainers', name: 'testcontainers', version:'1.12.4'
+    testCompile group: 'org.testcontainers', name: 'postgresql', version:'1.12.4'
+    // Framework for Consumer Driven Contracts, provider end
+    testCompile group: 'au.com.dius', name: 'pact-jvm-provider-spring', version: '4.0.4'
+    // Helping various other test libraries connect with the Spring Framework (with default dependencies provided)
+    testCompile group:'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.2.RELEASE'
 }
