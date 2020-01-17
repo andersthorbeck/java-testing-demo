@@ -5,6 +5,8 @@ The concepts are transferrable to other languages, but most of the demonstrated 
 Browse the test code to see the demos.
 Unless otherwise specified, the relevant demo code is in the `climate` application.
 
+Accompanying presentation slides can be found [here](https://bit.ly/2th5AXG).
+
 ## Libraries
 
 ### JUnit
