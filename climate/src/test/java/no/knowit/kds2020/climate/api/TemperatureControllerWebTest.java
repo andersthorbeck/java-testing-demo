@@ -24,6 +24,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TemperatureControllerWebTest {
 
+  /** Note: shouldn't need this, but couldn't figure out how to
+    * only load top layer of application context. */
   @ClassRule
   public static PostgreSQLContainer postgres = new PostgreSQLContainer();
 
@@ -46,7 +48,7 @@ public class TemperatureControllerWebTest {
   private TemperatureService serviceMock;
 
   @Test
-  public void getAllTemperatureReadings() {
+  public void get_against_temperature_readings_all_path_should_call_getAllTemperatureReadings() {
     //noinspection unchecked
     List<TemperatureReading> readings =
         restTemplate.getForObject("/temperature/readings/all", List.class);

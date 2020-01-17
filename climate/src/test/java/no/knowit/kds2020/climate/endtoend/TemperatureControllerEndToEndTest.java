@@ -57,7 +57,7 @@ public class TemperatureControllerEndToEndTest {
 
   @Test
   @FlywayTest(locationsForMigrate = "seed")
-  public void getAllTemperatureReadings() {
+  public void getAllTemperatureReadings_should_fetch_from_db_and_return_expected_http_response() {
     ResponseEntity<List<TemperatureReading>> responseEntity = restTemplate.exchange(
         "/temperature/readings/all",
         HttpMethod.GET,
@@ -71,4 +71,5 @@ public class TemperatureControllerEndToEndTest {
     );
     assertThat(readings, is(equalTo(expectedReadings)));
   }
+
 }

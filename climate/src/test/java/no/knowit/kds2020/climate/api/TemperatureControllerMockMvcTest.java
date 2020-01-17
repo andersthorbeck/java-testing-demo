@@ -22,7 +22,8 @@ public class TemperatureControllerMockMvcTest {
   private MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
   @Test
-  public void getAllTemperatureReadings() throws Exception {
+  public void get_against_temperature_readings_all_path_should_call_getAllTemperatureReadings()
+      throws Exception {
     LocalDateTime timestamp = LocalDateTime.of(2020, 1, 11, 20, 50, 17, 0);
     List<TemperatureReading> expectedReadings = Collections.singletonList(
         new TemperatureReading(timestamp, 25.0)

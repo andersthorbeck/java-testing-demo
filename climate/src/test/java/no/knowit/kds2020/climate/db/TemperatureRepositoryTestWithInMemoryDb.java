@@ -42,7 +42,7 @@ public class TemperatureRepositoryTestWithInMemoryDb {
 
   @Test
   @FlywayTest(locationsForMigrate = "seed")
-  public void test() {
+  public void fetchAllTemperatures_should_fetch_expected_values_from_db() {
 //    cleanAndMigrateDbWithSeed();
 
     List<TemperatureReading> readings = repository.fetchAllTemperatures();

@@ -80,7 +80,7 @@ public class TemperatureRepositoryTestWithContainerizedDb {
   }
 
   @Test
-  public void test() {
+  public void fetchAllTemperatures_should_fetch_expected_values_from_db() {
     TemperatureReading expectedReading =
         new TemperatureReading(LocalDateTime.of(2020, 1, 11, 12, 10, 0), 20.0);
 

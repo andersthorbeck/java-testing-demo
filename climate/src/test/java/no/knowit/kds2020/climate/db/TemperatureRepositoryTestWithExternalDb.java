@@ -40,7 +40,7 @@ public class TemperatureRepositoryTestWithExternalDb {
 
   @Test
   @FlywayTest(locationsForMigrate = "seed")
-  public void test() {
+  public void fetchAllTemperatures_should_fetch_expected_values_from_db() {
     List<TemperatureReading> readings = repository.fetchAllTemperatures();
 
     TemperatureReading expectedReading =
