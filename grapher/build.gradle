@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id "au.com.dius.pact" version "4.1.2"
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -12,6 +13,12 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+pact {
+    publish {
+        pactBrokerUrl = 'http://localhost:9292'
+    }
 }
 
 dependencies {

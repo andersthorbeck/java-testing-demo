@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
+import au.com.dius.pact.provider.junit.loader.PactBroker;
 import au.com.dius.pact.provider.junit.loader.PactFolder;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
@@ -22,7 +23,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 @RunWith(SpringRestPactRunner.class)
 @Provider(PROVIDER_NAME)
-@PactFolder("pacts")
+//@PactFolder("pacts")
+@PactBroker(scheme = "http", host = "localhost", port = "9292")
 @WebMvcTest
 public class PactProviderTest {
 
