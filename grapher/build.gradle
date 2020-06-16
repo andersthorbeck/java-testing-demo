@@ -16,6 +16,15 @@ repositories {
 }
 
 pact {
+    /* To start a local pact broker, using an ephemeral database, run the following command:
+     * $ docker run --name=pact-broker-app -d -p 9292:9292 \
+           -e PACT_BROKER_DATABASE_ADAPTER=sqlite \
+           -e PACT_BROKER_DATABASE_NAME=pact_broker.sqlite \
+           pactfoundation/pact-broker
+     *
+     * To publish pacts to it, run:
+     * $ gradle clean build && gradle pactPublish
+     */
     publish {
         pactBrokerUrl = 'http://localhost:9292'
     }
