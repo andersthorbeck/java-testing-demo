@@ -52,6 +52,7 @@ public class TemperatureServiceTest {
   @Test
   /** when: stubbing method behaviour */
   public void getAllTemperatureReadings_should_fetch_from_database() {
+    // setup
     LocalDateTime now = LocalDateTime.now();
     List<TemperatureReading> expectedReadings =
         singletonList(new TemperatureReading(now, 13));
@@ -59,8 +60,10 @@ public class TemperatureServiceTest {
     when(repositoryMock.fetchAllTemperatures())
         .thenReturn(expectedReadings);
 
+    // method call under test
     List<TemperatureReading> actualReadings = service.getAllTemperatureReadings();
 
+    // check expectations are met
     assertThat(actualReadings, is(equalTo(expectedReadings)));
   }
 
