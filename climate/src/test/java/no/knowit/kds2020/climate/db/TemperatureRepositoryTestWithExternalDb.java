@@ -7,7 +7,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.sql.DataSource;
 import no.knowit.kds2020.climate.model.TemperatureReading;
+import org.flywaydb.core.Flyway;
 import org.flywaydb.test.FlywayTestExecutionListener;
 import org.flywaydb.test.annotation.FlywayTest;
 import org.junit.Ignore;
@@ -21,15 +23,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+/*
 @TestExecutionListeners(
     listeners = FlywayTestExecutionListener.class,
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
 )
+*/
 @Ignore("requires a running DB reachable via the datasource config")
 public class TemperatureRepositoryTestWithExternalDb {
 
   @Autowired
   TemperatureRepository repository;
+
+  @Autowired
+  DataSource dataSource;
 
   /**
    * Start temporary external containerized database with:
@@ -39,13 +46,24 @@ public class TemperatureRepositoryTestWithExternalDb {
    */
 
   @Test
-  @FlywayTest(locationsForMigrate = "seed")
+//  @FlywayTest(locationsForMigrate = "seed")
   public void fetchAllTemperatures_should_fetch_expected_values_from_db() {
+    cleanAndMigrateDbWithSeed();
+
     List<TemperatureReading> readings = repository.fetchAllTemperatures();
 
     TemperatureReading expectedReading =
         new TemperatureReading(LocalDateTime.of(2020, 1, 11, 12, 10, 0), 20.0);
     assertThat(readings, is(equalTo(singletonList(expectedReading))));
+  }
+
+  private void cleanAndMigrateDbWithSeed() {
+    Flyway flyway = Flyway.configure()
+        .dataSource(dataSource)
+        .locations("db/migration", "seed")
+        .load();
+
+    flyway.migrate();
   }
 
 }
