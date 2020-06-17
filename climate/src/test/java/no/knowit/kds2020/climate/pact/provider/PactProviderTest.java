@@ -31,8 +31,10 @@ public class PactProviderTest {
   /**
    * Steps to test consumer contract:
    * 1. Consumer generates pact, by running TemperatureApiPactConsumerTest.
-   * 2. Pact is made available to provider, by copying it to the appropriate folder:
-   *    $ cp -r ../grapher/target/pacts/ src/test/resources/pacts/
+   * 2. Pact is made available to provider, either of the following ways:
+   *    a) by copying it to the appropriate folder:
+   *         $ cp -r ../grapher/target/pacts/ src/test/resources/pacts/
+   *    b) via an external pact broker
    * 3. Provider tests consumer expectations are met by running this test class.
    */
 
