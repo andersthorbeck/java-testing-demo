@@ -9,15 +9,14 @@ import org.junit.Test;
 
 public class TemperatureConverterTest {
 
-  private static final double ACCEPTABLE_DELTA = 0.0001;
-
   private TemperatureConverter converter = new TemperatureConverter();
 
   @Test
   public void celsiusToFahrenheit_should_convert_to_expected_fahrenheit_value() {
-    assertEquals(32.0, converter.celsiusToFahrenheit(0), ACCEPTABLE_DELTA);
-    assertEquals(212.0, converter.celsiusToFahrenheit(100), ACCEPTABLE_DELTA);
-    assertEquals(-148.0, converter.celsiusToFahrenheit(-100), ACCEPTABLE_DELTA);
+    double acceptableDelta = 0.0001;  // The doubles cannot deviate by more than this
+    assertEquals(32.0, converter.celsiusToFahrenheit(0), acceptableDelta);
+    assertEquals(212.0, converter.celsiusToFahrenheit(100), acceptableDelta);
+    assertEquals(-148.0, converter.celsiusToFahrenheit(-100), acceptableDelta);
   }
 
   @Test
