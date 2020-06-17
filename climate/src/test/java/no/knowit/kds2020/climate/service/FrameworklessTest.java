@@ -7,6 +7,8 @@ public class FrameworklessTest {
     testCelsiusToFahrenheitWithoutAssert();
   }
 
+  /** Be careful, java assertions must be explicitly enabled (by specifying JVM flag -ea),
+    * or they will not be run. */
   private static void testCelsiusToFahrenheit() {
     TemperatureConverter converter = new TemperatureConverter();
     assert converter.celsiusToFahrenheit(0) == 32.0 : "Actual value did not match expected value";
