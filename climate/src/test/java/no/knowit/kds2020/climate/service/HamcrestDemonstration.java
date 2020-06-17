@@ -71,6 +71,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.w3c.dom.Node.TEXT_NODE;
 import static org.xmlunit.diff.ComparisonType.ATTR_VALUE;
 import static org.xmlunit.diff.DifferenceEvaluators.chain;
@@ -117,6 +118,8 @@ public class HamcrestDemonstration {
     assertFalse(2 < 1);
 
     assertThrows(Exception.class, () -> {throw new Exception();});
+
+    //fail();
   }
 
   @Test(expected = NullPointerException.class)
