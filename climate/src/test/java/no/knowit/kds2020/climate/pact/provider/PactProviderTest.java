@@ -64,13 +64,13 @@ public class PactProviderTest {
   }
 
   /**
-   * Steps to run an ephemeral pact broker:
-   * 1. Check out git repository https://github.com/pact-foundation/pact-broker-docker
-   * 2. In said repository, run:
-   *    $ PACT_BROKER_DATABASE_ADAPTER=sqlite \
-          PACT_BROKER_DATABASE_NAME=pact_broker.sqlite \
-          ./script/test.sh
-   * 3. Access your local dockerized pact provider at:
+   * To start an ephemeral pact broker, run:
+   *   $ docker run --name=pact-broker-app -d -p 9292:9292 \
+           -e PACT_BROKER_DATABASE_ADAPTER=sqlite \
+           -e PACT_BROKER_DATABASE_NAME=pact_broker.sqlite \
+           pactfoundation/pact-broker
+   *
+   * Then access your local dockerized pact provider at:
    *      http://localhost:9292/
    */
 
