@@ -32,6 +32,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
     mergeMode = MergeMode.MERGE_WITH_DEFAULTS
 )
 @ActiveProfiles("db-test")
+@SuppressWarnings({"SqlResolve", "SqlNoDataSourceInspection"})
 public class DatabaseConstraintsTest {
 
   private static final LocalDateTime NOW_DATETIME = LocalDateTime.of(2020, 1, 18, 9, 30, 0);
