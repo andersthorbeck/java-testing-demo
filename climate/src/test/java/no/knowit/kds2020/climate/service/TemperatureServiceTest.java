@@ -37,9 +37,9 @@ import org.mockito.stubbing.Answer;
 
 public class TemperatureServiceTest {
 
-  private static final ZoneId OSLO_ZONE = ZoneId.of("Europe/Oslo");
   private static final LocalDateTime NOW =
       LocalDateTime.of(2020, 1, 18, 9, 0, 0);
+  private static final ZoneId OSLO_ZONE = ZoneId.of("Europe/Oslo");
   private static final Clock FIXED_CLOCK =
       Clock.fixed(NOW.atZone(OSLO_ZONE).toInstant(), OSLO_ZONE);
 
