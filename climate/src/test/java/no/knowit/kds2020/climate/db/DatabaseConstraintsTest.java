@@ -56,14 +56,6 @@ public class DatabaseConstraintsTest {
     jdbcTemplate.update(sql, params);
   }
 
-  @NotNull
-  private MapSqlParameterSource createDefaultValidParameters() {
-    MapSqlParameterSource params = new MapSqlParameterSource();
-    params.addValue("datetime", NOW_TIMESTAMP, Types.TIMESTAMP);
-    params.addValue("celsius", DEFAULT_CELSIUS, Types.DOUBLE);
-    return params;
-  }
-
   @Test(expected = DataIntegrityViolationException.class)
   public void datetime_is_not_nullable() {
     MapSqlParameterSource params = createDefaultValidParameters();
@@ -121,6 +113,14 @@ public class DatabaseConstraintsTest {
     MapSqlParameterSource params = createDefaultValidParameters();
     params.addValue("celsius", -273, Types.DOUBLE);
     performInsert(params);
+  }
+
+  @NotNull
+  private MapSqlParameterSource createDefaultValidParameters() {
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("datetime", NOW_TIMESTAMP, Types.TIMESTAMP);
+    params.addValue("celsius", DEFAULT_CELSIUS, Types.DOUBLE);
+    return params;
   }
 
 }
