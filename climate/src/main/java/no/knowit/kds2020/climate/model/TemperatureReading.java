@@ -20,7 +20,7 @@ public class TemperatureReading {
     this.celsius = celsius;
   }
 
-  @JsonFormat(shape = Shape.STRING)
+  @JsonFormat(shape = Shape.STRING)  // ISO 8601 string serialization
   public LocalDateTime getTimestamp() {
     return timestamp;
   }
