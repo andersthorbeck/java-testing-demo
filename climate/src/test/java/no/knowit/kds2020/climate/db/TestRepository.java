@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-@SuppressWarnings("Duplicates")
+@SuppressWarnings({"Duplicates", "SqlResolve", "SqlNoDataSourceInspection"})
 public class TestRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
