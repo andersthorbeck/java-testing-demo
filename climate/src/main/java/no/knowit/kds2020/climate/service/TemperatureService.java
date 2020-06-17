@@ -26,6 +26,14 @@ public class TemperatureService {
     this.repository = repository;
   }
 
+  /** For demonstration purposes only. */
+  public TemperatureService(
+      TemperatureConverter converter,
+      TemperatureRepository repository
+  ) {
+    this(Clock.systemDefaultZone(), converter, repository);
+  }
+
   public List<TemperatureReading> getAllTemperatureReadings() {
     return repository.fetchAllTemperatures();
   }

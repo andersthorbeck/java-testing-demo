@@ -99,6 +99,7 @@ public class TemperatureServiceTest {
   public void use_fixed_clock_for_time_comparison() {
     service.storeCurrentTemperature(5);
 
+//    verify(repositoryMock).storeReading(new TemperatureReading(LocalDateTime.now(), 5));
     verify(repositoryMock).storeReading(new TemperatureReading(NOW, 5));
   }
 
