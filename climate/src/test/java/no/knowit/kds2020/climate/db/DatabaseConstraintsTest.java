@@ -57,7 +57,7 @@ public class DatabaseConstraintsTest {
   }
 
   @NotNull
-  private MapSqlParameterSource createDefaultParameters() {
+  private MapSqlParameterSource createDefaultValidParameters() {
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("datetime", NOW_TIMESTAMP, Types.TIMESTAMP);
     params.addValue("celsius", DEFAULT_CELSIUS, Types.DOUBLE);
@@ -66,35 +66,35 @@ public class DatabaseConstraintsTest {
 
   @Test(expected = DataIntegrityViolationException.class)
   public void datetime_is_not_nullable() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     params.addValue("datetime", null, Types.TIMESTAMP);
     performInsert(params);
   }
 
   @Test(expected = DataIntegrityViolationException.class)
   public void celsius_is_not_nullable() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     params.addValue("celsius", null, Types.DOUBLE);
     performInsert(params);
   }
 
   @Test(expected = DataIntegrityViolationException.class)
   public void datetime_must_be_timestamp() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     params.addValue("datetime", "noon today", Types.TIMESTAMP);
     performInsert(params);
   }
 
   @Test(expected = BadSqlGrammarException.class)
   public void celsius_must_be_number() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     params.addValue("celsius", "twenty", Types.DOUBLE);
     performInsert(params);
   }
 
   @Test(expected = DuplicateKeyException.class)
   public void datetime_must_be_unique() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     performInsert(params);
     params.addValue("celsius", DEFAULT_CELSIUS + 1, Types.DOUBLE);
     performInsert(params);
@@ -102,7 +102,7 @@ public class DatabaseConstraintsTest {
 
   @Test
   public void celsius_does_not_need_to_be_unique() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     performInsert(params);
     Timestamp laterTime = toSqlTimestamp(NOW_DATETIME.plusMinutes(1));
     params.addValue("datetime", laterTime, Types.TIMESTAMP);
@@ -111,14 +111,14 @@ public class DatabaseConstraintsTest {
 
   @Test(expected = DataIntegrityViolationException.class)
   public void celsius_can_not_be_below_absolute_zero() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     params.addValue("celsius", -274, Types.DOUBLE);
     performInsert(params);
   }
 
   @Test
   public void celsius_can_be_just_above_absolute_zero() {
-    MapSqlParameterSource params = createDefaultParameters();
+    MapSqlParameterSource params = createDefaultValidParameters();
     params.addValue("celsius", -273, Types.DOUBLE);
     performInsert(params);
   }
