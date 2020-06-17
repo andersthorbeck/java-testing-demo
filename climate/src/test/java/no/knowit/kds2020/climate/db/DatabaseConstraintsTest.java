@@ -41,7 +41,6 @@ public class DatabaseConstraintsTest {
   @ClassRule
   public static PostgreSQLContainer postgres = new PostgreSQLContainer();
 
-  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") // https://stackoverflow.com/q/26889970/854151
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
