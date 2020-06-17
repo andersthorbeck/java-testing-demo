@@ -4,9 +4,15 @@ public class FrameworklessTest {
 
   public static void main(String[] args) {
     testCelsiusToFahrenheit();
+    testCelsiusToFahrenheitWithoutAssert();
   }
 
   private static void testCelsiusToFahrenheit() {
+    TemperatureConverter converter = new TemperatureConverter();
+    assert converter.celsiusToFahrenheit(0) == 32.0 : "Actual value did not match expected value";
+  }
+
+  private static void testCelsiusToFahrenheitWithoutAssert() {
     TemperatureConverter converter = new TemperatureConverter();
     if (converter.celsiusToFahrenheit(0) != 32.0) {
       throw new RuntimeException("Actual value did not match expected value");
