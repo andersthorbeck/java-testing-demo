@@ -10,25 +10,15 @@ import java.util.List;
 import javax.sql.DataSource;
 import no.knowit.kds2020.climate.model.TemperatureReading;
 import org.flywaydb.core.Flyway;
-import org.flywaydb.test.FlywayTestExecutionListener;
-import org.flywaydb.test.annotation.FlywayTest;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.TestExecutionListeners.MergeMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-/*
-@TestExecutionListeners(
-    listeners = FlywayTestExecutionListener.class,
-    mergeMode = MergeMode.MERGE_WITH_DEFAULTS
-)
-*/
 @Ignore("requires a running DB reachable via the datasource config")
 public class TemperatureRepositoryTestWithExternalDb {
 
@@ -46,7 +36,6 @@ public class TemperatureRepositoryTestWithExternalDb {
    */
 
   @Test
-//  @FlywayTest(locationsForMigrate = "seed")
   public void fetchAllTemperatures_should_fetch_expected_values_from_db() {
     cleanAndMigrateDbWithSeed();
 
